@@ -1,47 +1,67 @@
-class ClassName {
+class Article {
 
-    static propertyName: string = "static property value";
+    public title:string;
     
-    public propertyName: string = "default value";
+    public publicationDate:string;
+    
+    public category:string;
+    
+    public author?:User;
+    
+    public body:string;
+    
+    public description:string;
+    
+    public price:string;
 
-    protected protectedPropertyName: string = "default protected value";
+    public ratings:Rating[] = [];
 
-    private privatePropertyName: string = "default private value";
+    get rating():number{
+        
+        if(!this.ratings.length){
+            return 0;
+        }
+        
+        return this.ratings.reduce((total,rating) => total + rating.value, 0) / this.ratings.length;
 
-    constructor(){
-        this.propertyName = "default value";
-    }
-
-    methodName(){
-        this.privatePropertyName = "new property name";
-    }
-
-    readStatic(){
-        return ClassName.propertyName;
-    }
-
-    static readStatic(){
-        this.propertyName;
-    }
-
-}
-
-class AnotherClassName extends ClassName {
-
-    anotherMethodName(){
-        this.protectedPropertyName = "another value";
     }
 
 }
 
-const classInstance = new ClassName();
-classInstance.propertyName = "1";
 
-const anotherClassInstance = new AnotherClassName();
-anotherClassInstance.propertyName = "2";
+class Rating {
 
-ClassName.propertyName = "3";
+    constructor( public user:User, public article:Article, public value:number ){
+        article.ratings.push(this);
+    }
 
-console.log( ClassName.propertyName );
-console.log( classInstance.propertyName, classInstance.readStatic() );
-console.log( anotherClassInstance.propertyName, classInstance.readStatic() );
+}
+
+
+class User {
+
+    constructor( public name:string ){
+
+    }
+
+}
+
+class Category {
+
+    title: string;
+
+    description: string;
+
+    genre:string;
+
+}
+
+const gerald = new User("Gerald");
+const article = new Article();
+const rating1 = new Rating( gerald, article, 3 );
+const rating2 = new Rating( gerald, article, 1 );
+const rating3 = new Rating( gerald, article, 4 );
+const rating4 = new Rating( gerald, article, 5 );
+
+
+console.log( article, article.rating );
